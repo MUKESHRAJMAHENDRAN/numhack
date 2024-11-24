@@ -69,7 +69,8 @@ The application leverages the following technologies:
 
 
 ## **5. Architecture**  
-The application employs a modular architecture:  
+The application employs a modular architecture: 
+
 1. **User Authentication:** Django handles user sign-up and login.  
 2. **Occupation-Based Routing:** Each occupation triggers its specific agents.  
 3. **Agent Execution:**  
@@ -79,7 +80,7 @@ The application employs a modular architecture:
    - ChromaDB stores vector embeddings for RAG.  
    - APIs like OpenWeather and Tavily provide real-time data for decisions.  
 
-
+![Architecture][https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/Architecture.png]
 ## **6. Future Enhancements**  
 - **Regional Language Support:** Extend the application to support multiple languages.  
 - **Additional AI Models:** Incorporate models like Llama, Gemini, etc., for enhanced capabilities.  
