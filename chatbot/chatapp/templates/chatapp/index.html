@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full-Page Chat Interface</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            box-sizing: border-box;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #fff;
+            box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .dropdown, .location-input {
+            width: 100%;
+            padding: 14px 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            background-color: #ffffff;
+            appearance: none;
+            box-sizing: border-box;
+        }
+        .dropdown:focus, .location-input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(102, 175, 233, 0.6);
+            outline: none;
+        }
+        ::placeholder {
+            color: #bbb;
+        }
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-left: 20px;
+            box-sizing: border-box;
+            width: 1250px;
+        }
+        .messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+        .message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-message {
+            background-color: #d1e7dd;
+            text-align: right;
+            flex-direction: row-reverse;
+        }
+        .bot-message {
+            background-color: #cff4fc;
+            text-align: left;
+        }
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            background-color: #f4f4f9;
+            box-sizing: border-box;
+        }
+        .image-preview {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        #preview {
+            max-height: 80px;
+            max-width: 100%;
+            border-radius: 5px;
+        }
+        .remove-preview-button {
+            display: none;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #ff4d4d;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            color: white;
+            font-size: 12px;
+            width: 20px;
+            height: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+        input[type="text"] {
+            border: none;
+            outline: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            flex: 1;
+            border-radius: 25px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .send-button, .upload-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 20px;
+            color: #007bff;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <select class="dropdown">
+            <option value="fisherman">Fisherman</option>
+            <option value="farmer">Farmer</option>
+            <option value="education">Education</option>
+        </select>
+        <input type="text" class="location-input" placeholder="Enter location">
+    </div>
+    <div class="chat-box">
+        <div class="messages" id="messages"></div>
+        <div class="input-wrapper">
+            <div class="image-preview" id="imagePreviewContainer">
+                <img id="preview" alt="Image preview">
+                <button class="remove-preview-button" onclick="removePreview()">&#10060;</button>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <input type="text" id="chatInput" placeholder="Type a message...">
+                <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                <button class="upload-button" onclick="document.getElementById('imageUpload').click();">&#128247;</button>
+                <button class="send-button" onclick="sendMessage()">
+                    <span class="send-icon">&#10148;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const chatInput = document.getElementById('chatInput');
+        const messagesDiv = document.getElementById('messages');
+        const preview = document.getElementById('preview');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        let image_src;
+        let uploadedImageFile = null;
+    
+        chatInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    
+        function appendMessage(message, className, imageSrc = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message ' + className;
+            if (imageSrc) {
+                const img = document.createElement('img');
+                img.src = imageSrc;
+                img.style.maxHeight = '50px';
+                img.style.borderRadius = '5px';
+                messageDiv.appendChild(img);
+            }
+            const textSpan = document.createElement('span');
+            textSpan.innerText = message;
+            messageDiv.appendChild(textSpan);
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            const occupation = document.querySelector('.dropdown').value;
+            const location = document.querySelector('.location-input').value.trim();
+            if (message || uploadedImageFile) {
+                // Pass the src only if there is an image file
+                appendMessage('You: ' + message, 'user-message', uploadedImageFile ? preview.src : null);
+                chatInput.value = '';
+                removePreview();
+    
+                const formData = new FormData();
+                formData.append('message', message);
+                formData.append('occupation', occupation);
+                formData.append('location', location);
+                formData.append('base64_image', image_src);
+                console.log("______", message)
+                console.log("__hhhhhhhhh____", image_src)
+                if (uploadedImageFile) {
+                    formData.append('image', uploadedImageFile);
+                    // let base64ImageData = preview.src;
+                    // console.log("_____________", preview.src)
+                    // formData.append('base64_image', base64ImageData);
+                }
+    
+                fetch('/send_message/', {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    appendMessage('Bot: ' + data.response, 'bot-message');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    appendMessage('Bot: Sorry, there was an error processing your request.', 'bot-message');
+                });
+            }
+        }
+    
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                uploadedImageFile = file;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    image_src = preview.src
+                    console.log('Image base64 source:', image_src);
+                    imagePreviewContainer.style.display = 'flex';
+                    document.querySelector('.remove-preview-button').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    
+        function removePreview() {
+            preview.src = '';  // Clear image source
+            imagePreviewContainer.style.display = 'none';
+            document.querySelector('.remove-preview-button').style.display = 'none';
+            uploadedImageFile = null;
+        }
+    
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>
