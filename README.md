@@ -1,5 +1,6 @@
 # **GenAI Application [Multifunctional Agent Framework Application for Fisherman, farmers, Education]**  
 A versatile, AI-powered platform built with Django, HTML, CSS, JavaScript, LangChain, OpenAI, and ChromaDB. This application caters to users with occupations like *Fisherman, Farmer,* and *Education*, offering tailored AI solutions for weather analysis, sustainable practices, career planning, and learning support.  
+[Demo video for the project GenAI Application Multifunctional Agent Framework Application for Fisherman, farmers, Education](https://drive.google.com/file/d/1GrKOP8vAsQ5sV9990ZUVyS16Xti6_k9E/view?usp=drive_link)
 
 ## **Table of Contents**  
 1. [Introduction](#introduction)  
