@@ -23,6 +23,9 @@ from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import re
+from .education import helper_agent, researcher_agent, assesment_agent
+from .education_tool_call import education_tool
+from .history import get_last_two_messages
 
 @login_required(login_url='login')
 def home(request):
@@ -66,16 +69,24 @@ def send_message(request):
                 return JsonResponse({'response': analyzed_data})
             elif tool_call == "fishing_technique":
                 print("_____________________")
+                db_path = r'C:\Users\Mukesh\Desktop\numhack_2024\chatbot\db.sqlite3'
+                message_pairs = get_last_two_messages(db_path)
+                for user_message, bot_response in message_pairs:
+                    message += f"User Message: {user_message}, Bot Response: {bot_response}"
                 ai_response = data_retreival(query=message, collection_name="fishing_collection")
                 response = data_refinement(user_query=message, retreived_data=ai_response)
+                chat_message = ChatMessage(user_message=message, bot_response=response)
+                chat_message.save()
                 return JsonResponse({'response': response})
             elif tool_call == "iucn_status":
                 # print("peeeeeeeee", message)
                 # print("zzzzzzzzkeeeeee", en_species)
                 en_species = endangered(base64_image=f"{base64_image}", user_message=message)
+                chat_message = ChatMessage(user_message=message, bot_response=en_species)
+                chat_message.save()
                 return JsonResponse({'response': en_species})
             else:
-                return JsonResponse({'response': "Hi, How can i help you"})
+                return JsonResponse({'response': helper_agent(message)})
             
         if occupation == "farmer":
             tool_call  = agri_tool(message)
@@ -87,22 +98,55 @@ def send_message(request):
                 return JsonResponse({'response': analyzed_data})
             elif tool_call == "agri_technique":
                 print("___________________")
+                db_path = r'C:\Users\Mukesh\Desktop\numhack_2024\chatbot\db.sqlite3'
+                message_pairs = get_last_two_messages(db_path)
+                for user_message, bot_response in message_pairs:
+                    message += f"User Message: {user_message}, Bot Response: {bot_response}"
                 ai_response = data_retreival(query=message, collection_name="agri_collection")
                 response = data_refinement(user_query=message, retreived_data=ai_response)
+                chat_message = ChatMessage(user_message=message, bot_response=response)
+                chat_message.save()
                 return JsonResponse({'response': response})
             elif tool_call == "iucn_status":
                 # print("peeeeeeeee", message)
                 # print("zzzzzzzzkeeeeee", en_species)
                 en_species = agri_endangered(base64_image=f"{base64_image}", user_message=message)
+                chat_message = ChatMessage(user_message=message, bot_response=en_species)
+                chat_message.save()
                 return JsonResponse({'response': en_species})
             else:
-                return JsonResponse({'response': "Hi, How can i help you"})
+                return JsonResponse({'response': helper_agent(message)})
         if occupation == "education":
-            result = get_math_solution(message)
-            print("_____________")
-            print(result)
-            ai_resp = get_math_steps(result)
-            return JsonResponse({'response': ai_resp})
+            tool_call  = education_tool(message)
+            if tool_call == "researcher_agent":
+                research = researcher_agent(message)
+                chat_message = ChatMessage(user_message=message, bot_response=research)
+                chat_message.save()
+                return JsonResponse({'response': research})
+            elif tool_call == "assesment_agent":
+                asses = assesment_agent(message)
+                chat_message = ChatMessage(user_message=message, bot_response=asses)
+                chat_message.save()
+                return JsonResponse({'response': asses})
+            elif tool_call == "helper_agent":
+                # db_path = r'C:\Users\Mukesh\Desktop\numhack_2024\chatbot\db.sqlite3'
+                # message_pairs = get_last_two_messages(db_path)
+                # for user_message, bot_response in message_pairs:
+                #     message += f"User Message: {user_message}, Bot Response: {bot_response}"
+                helper = helper_agent(message)
+                chat_message = ChatMessage(user_message=message, bot_response=helper)
+                chat_message.save()
+                return JsonResponse({'response': helper})
+            else:
+                # db_path = r'C:\Users\Mukesh\Desktop\numhack_2024\chatbot\db.sqlite3'
+                # message_pairs = get_last_two_messages(db_path)
+                # for user_message, bot_response in message_pairs:
+                #     message += f"User Message: {user_message}, Bot Response: {bot_response}"
+                result = get_math_solution(message)
+                ai_resp = get_math_steps(result)
+                chat_message = ChatMessage(user_message=message, bot_response=ai_resp)
+                chat_message.save()
+                return JsonResponse({'response': ai_resp})
         
     return JsonResponse({'error': 'Invalid request'}, status=400)
 

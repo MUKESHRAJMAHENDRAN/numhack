@@ -45,7 +45,7 @@ def weather_analyzer(weather_extraction, occupation):
                 "role": "user",
                 "content": f"""I am giving you the next three days data :{weather_extraction} 
                 for with an span of 3hours you have to help me weather the {occupation} is good to
-                go for [planting/fishing] or not Based on the occupation only you should response. Explain the result in three lines"""
+                go or not Based on the occupation only you should response. Explain the result in three lines"""
             }
         ]
     )
