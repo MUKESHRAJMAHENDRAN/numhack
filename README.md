@@ -119,7 +119,9 @@ The application employs a modular architecture:
 
 5. Access the application:  
    - Open `http://localhost:8000` in your browser.
-  
+
+![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/6.png)
+![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/7.png)
 ![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/1.png)
 ![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/2.png)
 ![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/3.png)
