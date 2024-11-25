@@ -81,7 +81,7 @@ The application employs a modular architecture:
    - ChromaDB stores vector embeddings for RAG.  
    - APIs like OpenWeather and Tavily provide real-time data for decisions.  
 
-![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/Architecture.png)
+![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/images/Architecture.png)
 ## **6. Future Enhancements**  
 - **Regional Language Support:** Extend the application to support multiple languages.  
 - **Additional AI Models:** Incorporate models like Llama, Gemini, etc., for enhanced capabilities.  
@@ -120,11 +120,11 @@ The application employs a modular architecture:
 5. Access the application:  
    - Open `http://localhost:8000` in your browser.
 
-![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/6.png)
-![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/7.png)
-![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/1.png)
-![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/2.png)
-![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/3.png)
-![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/4.png)
-![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/5.png)
+![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/images/main/6.png)
+![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/images/7.png)
+![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/images/1.png)
+![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/images/2.png)
+![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/images/3.png)
+![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/images/4.png)
+![Architecture](https://github.com/MUKESHRAJMAHENDRAN/numhack_2024/blob/main/images/5.png)
 
